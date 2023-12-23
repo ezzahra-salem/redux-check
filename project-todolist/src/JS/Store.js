@@ -1,7 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit";
-import Todo from "./Todo";
-
+import { configureStore } from '@reduxjs/toolkit'
+import todo from './Todo'
 export const store = configureStore({
-  reducer: { todo: Todo },
-});
-export default store;
+  reducer: {todo:todo},
+})
+export default store

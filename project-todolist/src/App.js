@@ -1,68 +1,45 @@
-import "./App.css";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addtodo, donepage } from "./JS/Todo";
+import "./App.css";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import { useSelector, useDispatch } from "react-redux";
+import { addtask, donepage } from "./JS/Todo";
 
 function App({ e }) {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const [task, settask] = useState({ name: "" });
   const dispatch = useDispatch();
-  const liste = useSelector((store) => store.todo) || [];
-  const [next, setnext] = useState(false);
+  const task = useSelector((store) => store.todo);
+  const [done, settask] = useState({ name: "" });
+
   return (
-    <div className="App">
-      <h1>My to do liste</h1>
-      <input
-        type="text"
-        placeholder="my task"
-        onChange={(e) => settask({ ...task, name: e.target.value })}
-      />
-      <button onClick={() => dispatch(addtodo(task))}>Add</button>
-      <div className="list">
-      {liste.map((e) => (
+    <div className="App-header">
+      <h1>welcom to my todo list</h1>
+      <div className="card">
         <Card style={{ width: "18rem" }}>
           <Card.Body>
-            <h1>My Task</h1>
-            <Card.Title>{e.name}</Card.Title>
-            <button className="btn-del" onClick={()=>dispatch(donepage(e.name))}>Delete</button>
+            <div className="text">
+              <input
+                type="searsh"
+                placeholder="YOUR TASK"
+                onChange={(e) => settask({ done, name: e.target.value })}
+              />
+              <button onClick={() => dispatch(addtask(done))}>ADD</button>
+            </div>
+            <Card.Text>
+              <ul className="todo-list">
+                {task.map((e) => (
+                  <li className="todo-item" key={e.name}>
+                    <label>{e.name}</label>
+                    <button onClick={() => dispatch(donepage(e.name))}>
+                      DELETE
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </Card.Text>
           </Card.Body>
-          <div>
-          <Button className="btn-Done" variant="primary" onClick={handleShow}>
-            Done Task
-          </Button>
-          <Modal
-            show={show}
-            onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
-          >
-<Modal.Header closeButton>
-              <Modal.Title>SUCCESS TASK</Modal.Title>
-            </Modal.Header>
-            <Button variant="secondary" onClick={handleClose}>
-                Close
-              </Button>
-            <Button className="btn-add" onClick={() => setnext(!next)}>ADD NEW TASK</Button>
-            {next ? ( <div>
-              <input type="text" placeholder="NEW TASK" onChange={(e) => settask({task, name: e.target.value })}/>
-              <button onClick={() => dispatch(addtodo(task))}>add</button>
-            </div>) :null}
-            <Modal.Body>
-              YOUR SUCCESS TASK
-              <h1>{e.name}</h1>
-            </Modal.Body>
-          </Modal>
-        </div>
-      </Card>
-    ))}
+        </Card>
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default App;
